@@ -1,0 +1,6 @@
+pydstool
+matplotlib
+dash
+itsdangerous==2.0.1
+werkzeug==2.0.3
+dash-bootstrap-components
