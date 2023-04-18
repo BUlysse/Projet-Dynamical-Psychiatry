@@ -46,3 +46,19 @@ Just click on the http link and the dashboard will appear in your navigator.
 
 Every time you change a parameter value using the sliders, you will have to wait a bit till the figures update, just be patient !
 (The associated navigator tab will be named "Updating ..." if the update did not occur yet)
+
+## Programs function
+
+Those program mainly print figures I used in my report.
+
+* `bifurcation_diagrams` : print bifurcation diagram of the (x-y) subsystem for specific conditions
+* `dash_figure.py` : run visualization tool
+* `f_L_relation.py` : print the figure relating the final value of f.L and L
+* `fixed_points.py` : compute the 2D and 4D fixed point of the system according to specified parameter values
+* `limit_cycle.py` : [NOT FUNCTIONNAL] print the limit cycles of the system
+* `phase_plane_2d.py` : print the (x-y) phase plane with the 2d fixed point (corresponding to the phase plane fixed points)
+* `phase_plane.py` : print the (x-y) phase plane with the 4d fixed points (fixed points will not correspond to the 2d phase plane fixed points)
+* `reproduce_clinical_cases.py` : print a figure with a simulation corresponding to each of the 4 clinical cases of the original article
+* `time_series_damien.py` : code damien originally sent me to compute and print the times series
+* `times_series_ulysse.py` : code I created to compute and print the time series
+* `z_oscillations.py` : compute and print the number of oscillations between high and low symptomes as a function of L
