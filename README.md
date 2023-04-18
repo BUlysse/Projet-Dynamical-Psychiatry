@@ -56,9 +56,11 @@ Those program mainly print figures I used in my report.
 * `f_L_relation.py` : print the figure relating the final value of f.L and L
 * `fixed_points.py` : compute the 2D and 4D fixed point of the system according to specified parameter values
 * `limit_cycle.py` : [NOT FUNCTIONNAL] print the limit cycles of the system
+* `model_test.py` : print time series using matplotlib
 * `phase_plane_2d.py` : print the (x-y) phase plane with the 2d fixed point (corresponding to the phase plane fixed points)
 * `phase_plane.py` : print the (x-y) phase plane with the 4d fixed points (fixed points will not correspond to the 2d phase plane fixed points)
 * `reproduce_clinical_cases.py` : print a figure with a simulation corresponding to each of the 4 clinical cases of the original article
+* `test_pydstool.py` : example of program for PyDSTool (from the PyDSTool documentation)
 * `time_series_damien.py` : code damien originally sent me to compute and print the times series
 * `times_series_ulysse.py` : code I created to compute and print the time series
 * `z_oscillations.py` : compute and print the number of oscillations between high and low symptomes as a function of L
