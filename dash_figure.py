@@ -80,17 +80,17 @@ class System:
     def get_L(self):
         return self.__L
 
-    def set_S(self,S):
-        self.__S = S
+    def set_Rs(self,Rs):
+        self.__Rs = Rs
 
-    def get_S(self):
-        return self.__S
+    def get_Rs(self):
+        return self.__Rs
 
-    def set_P(self,P):
-        self.__P = P
+    def set_lambb(self,lambb):
+        self.__lambb = lambb
 
-    def get_P(self):
-        return self.__P
+    def get_lambb(self):
+        return self.__lambb
 
     def set_noise(self,noise):
         self.__noise = noise
@@ -455,32 +455,32 @@ rb_value = html.Div(
     className="mt-2",
 )
 
-s_value = html.Div(
+rs_value = html.Div(
     [
-        dbc.Label("S value", html_for="s"),
+        dbc.Label("Rs value", html_for="Rs"),
         dcc.Slider(
-                id="slider-S",
-                min=2,
-                max=12,
-                step=0.1,
-                value=4,
-                marks = {i:str(i) for i in np.linspace(2,12,6)},
+                id="slider-Rs",
+                min=0.2,
+                max=2,
+                step=0.05,
+                value=1,
+                marks = {i:str(i) for i in np.round(np.linspace(0.2,2,5),2)},
                 tooltip={"placement": "bottom", "always_visible": True}
                 ),
     ],
     className="mt-2",
 )
 
-p_value = html.Div(
+lambb_value = html.Div(
     [
-        dbc.Label("P value", html_for="p"),
+        dbc.Label("Lambda_b value", html_for="lambb"),
         dcc.Slider(
-                id="slider-P",
+                id="slider-lambb",
                 min=0,
-                max=15,
-                step=0.1,
-                value=10,
-                marks = {i:str(i) for i in np.linspace(0,15,6)},
+                max=0.2,
+                step=0.005,
+                value=0.05,
+                marks = {i:str(i) for i in np.linspace(0,0.2,6)},
                 tooltip={"placement": "bottom", "always_visible": True}
                 ),
     ],
@@ -529,7 +529,7 @@ checklist = html.Div(
 
 control_panel = dbc.Card(
     dbc.CardBody(
-        [z_value,f_value,html.Hr(),l_value,rb_value,s_value, p_value, html.Hr(),x0_value,html.Hr(),checklist],
+        [z_value,f_value,html.Hr(),l_value,rb_value,rs_value,lambb_value, html.Hr(),x0_value,html.Hr(),checklist],
         className="bg-light",
     )
 )
@@ -550,15 +550,15 @@ app.layout = html.Div(
     Input("slider-f", "value"),
     Input("slider-L", "value"),
     Input("slider-Rb", "value"),
-    Input("slider-S", "value"),
-    Input("slider-P", "value"),
+    Input("slider-Rs", "value"),
+    Input("slider-lambb", "value"),
     Input("options", "value"),
     Input("input-x", "value"),
     Input("input-y", "value"),
     Input("input-z", "value"),
     Input("input-f", "value"),
 )
-def get_figure(z,f,L,Rb,S,P,options,x0='0',y0='0.1',z0='0',f0='0'):
+def get_figure(z,f,L,Rb,Rs,lambb,options,x0='0',y0='0.1',z0='0',f0='0'):
     noise = False
     perturbation = False
     print_trajectory = False
@@ -571,11 +571,11 @@ def get_figure(z,f,L,Rb,S,P,options,x0='0',y0='0.1',z0='0',f0='0'):
 
     X0 = np.array([float(x0),float(y0),float(z0),float(f0)])
     update_fixed_points = True
-    if L != system.get_L() or Rb != system.get_Rb() or S != system.get_S() or P != system.get_P():
+    if L != system.get_L() or Rb != system.get_Rb() or Rs != system.get_Rs() or lambb != system.get_lambb():
         system.set_L(L)
         system.set_Rb(Rb)
-        system.set_S(S)
-        system.set_P(P)
+        system.set_Rs(Rs)
+        system.set_lambb(lambb)
 
     if (X0 != trajectory_cache.get_X0()).any() or noise != system.get_noise() or perturbation != system.get_perturbation():
         system.set_noise(noise)
@@ -592,6 +592,9 @@ def get_figure(z,f,L,Rb,S,P,options,x0='0',y0='0.1',z0='0',f0='0'):
 
     ycline = system.make_y_cline(y_range_null,z,f)
     ycline[:,np.add(ycline[1,:]<xlim[0],ycline[1,:]>xlim[1])] = None
+
+    xcline = system.make_x_cline(y_range_null)
+    xcline[:,np.add(xcline[1,:]<xlim[0],xcline[1,:]>xlim[1])] = None
 
     vect_field = system.get_vector_field(z,f)
 
