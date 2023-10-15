@@ -92,6 +92,12 @@ class System:
     def get_lambb(self):
         return self.__lambb
 
+    def set_lambs(self,lambs):
+        self.__lambs = lambs
+
+    def get_lambs(self):
+        return self.__lambs
+
     def set_noise(self,noise):
         self.__noise = noise
 
@@ -444,11 +450,11 @@ rb_value = html.Div(
         dbc.Label("Rb value", html_for="rb"),
         dcc.Slider(
                 id="slider-Rb",
-                min=0.85,
+                min=0.75,
                 max=1.15,
                 step=0.002,
                 value=1.04,
-                marks = {i:str(i) for i in np.round(np.linspace(0.85,1.15,5),2)},
+                marks = {i:str(i) for i in np.round(np.linspace(0.75,1.15,5),2)},
                 tooltip={"placement": "bottom", "always_visible": True}
                 ),
     ],
@@ -477,10 +483,26 @@ lambb_value = html.Div(
         dcc.Slider(
                 id="slider-lambb",
                 min=0,
-                max=0.2,
-                step=0.005,
+                max=0.5,
+                step=0.01,
                 value=0.05,
-                marks = {i:str(i) for i in np.linspace(0,0.2,6)},
+                marks = {i:str(i) for i in np.linspace(0,0.5,6).round(2)},
+                tooltip={"placement": "bottom", "always_visible": True}
+                ),
+    ],
+    className="mt-2",
+)
+
+lambs_value = html.Div(
+    [
+        dbc.Label("Lambda_s value", html_for="lambs"),
+        dcc.Slider(
+                id="slider-lambs",
+                min=0,
+                max=0.5,
+                step=0.01,
+                value=0.1,
+                marks = {i:str(i) for i in np.linspace(0,0.5,6).round(2)},
                 tooltip={"placement": "bottom", "always_visible": True}
                 ),
     ],
@@ -529,7 +551,7 @@ checklist = html.Div(
 
 control_panel = dbc.Card(
     dbc.CardBody(
-        [z_value,f_value,html.Hr(),l_value,rb_value,rs_value,lambb_value, html.Hr(),x0_value,html.Hr(),checklist],
+        [z_value,f_value,html.Hr(),l_value,rb_value,rs_value,lambb_value,lambs_value, html.Hr(),x0_value,html.Hr(),checklist],
         className="bg-light",
     )
 )
@@ -552,13 +574,14 @@ app.layout = html.Div(
     Input("slider-Rb", "value"),
     Input("slider-Rs", "value"),
     Input("slider-lambb", "value"),
+    Input("slider-lambs", "value"),
     Input("options", "value"),
     Input("input-x", "value"),
     Input("input-y", "value"),
     Input("input-z", "value"),
     Input("input-f", "value"),
 )
-def get_figure(z,f,L,Rb,Rs,lambb,options,x0='0',y0='0.1',z0='0',f0='0'):
+def get_figure(z,f,L,Rb,Rs,lambb,lambs,options,x0='0',y0='0.1',z0='0',f0='0'):
     noise = False
     perturbation = False
     print_trajectory = False
@@ -571,11 +594,12 @@ def get_figure(z,f,L,Rb,Rs,lambb,options,x0='0',y0='0.1',z0='0',f0='0'):
 
     X0 = np.array([float(x0),float(y0),float(z0),float(f0)])
     update_fixed_points = True
-    if L != system.get_L() or Rb != system.get_Rb() or Rs != system.get_Rs() or lambb != system.get_lambb():
+    if L != system.get_L() or Rb != system.get_Rb() or Rs != system.get_Rs() or lambb != system.get_lambb()  or lambs != system.get_lambs():
         system.set_L(L)
         system.set_Rb(Rb)
         system.set_Rs(Rs)
         system.set_lambb(lambb)
+        system.set_lambs(lambs)
 
     if (X0 != trajectory_cache.get_X0()).any() or noise != system.get_noise() or perturbation != system.get_perturbation():
         system.set_noise(noise)
